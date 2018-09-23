@@ -33,6 +33,8 @@ docker-compose contains:
 
 * consul - service discorvery - binding port :8500
 * go.micro.api - micro api gateway - binding port :8080
+* mongodb - document store database - binding port :27017
+* redis - key/value store database - binding port :6379
 
 make sure any port above is not being used
 

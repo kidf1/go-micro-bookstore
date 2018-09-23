@@ -28,6 +28,13 @@ services:
     - book-store
     ports:
     - "27017:27017"
+  redis:
+    container_name: redis
+    image: redis:latest
+    networks:
+    - book-store
+    ports:
+    - "6379:6379"
 networks: 
   book-store:
     name: book-store
