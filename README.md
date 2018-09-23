@@ -10,6 +10,7 @@ This repository contains my learning project how to implement microservices arch
 
 * [go.micro.bookstore.srv.catalog](./catalog/srv)
 * [go.micro.bookstore.srv.product](./product/srv)
+* [go.micro.bookstore.srv.user](./user/srv)
 
 ## How To Run
 
