@@ -1,0 +1,27 @@
+version: '3.5'
+services:
+  consul:
+    container_name: consul
+    command: agent -dev -client 0.0.0.0 -ui
+    image: consul:latest
+    networks: 
+    - book-store
+    ports:
+    - "8500:8500"
+  api:
+    container_name: micro-api
+    command: --registry_address=consul:8500 --enable_stats --register_interval=5 --register_ttl=10 api
+    image: microhq/micro:latest
+    environment:
+    - MICRO_API_HANDLER=api
+    - MICRO_API_NAMESPACE=go.micro.bookstore.api
+    links:
+    - consul
+    networks: 
+    - book-store
+    ports:
+    - "8080:8080"
+networks: 
+  book-store:
+    name: book-store
+    driver: bridge
