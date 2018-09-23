@@ -7,6 +7,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/mgo.v2"
 
+	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/errors"
 
 	user "github.com/ahmadnurus/go-micro-bookstore/user/srv/proto/user"
@@ -17,8 +18,9 @@ import (
 
 // Handler struct
 type Handler struct {
-	Session     *mgo.Session
-	UserService user.UserService
+	Session        *mgo.Session
+	AccountCreated micro.Publisher
+	UserService    user.UserService
 }
 
 // Repo method
@@ -51,6 +53,10 @@ func (h *Handler) CreateAccount(ctx context.Context, req *proto.CreateAccountReq
 	req.Account.IsVerified = false
 	req.Account.ProfileId = profile.Profile.Id
 	if err := h.Repo().CreateAccount(req.Account); err != nil {
+		return err
+	}
+
+	if err := h.AccountCreated.Publish(ctx, req.Account); err != nil {
 		return err
 	}
 
@@ -135,6 +141,10 @@ func (h *Handler) Login(ctx context.Context, req *proto.LoginRequest, res *proto
 			return errors.NotFound("go.micro.bookstore.srv.account", "account not found")
 		}
 		return err
+	}
+
+	if account.IsVerified == false {
+		return errors.Unauthorized("go.micro.bookstore.srv.account", "require verify email")
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(account.Password), []byte(req.Password)); err != nil {

@@ -42,11 +42,14 @@ func main() {
 		log.Fatalf("Could not connect to database %s - %v", repo.Host, err)
 	}
 
+	// NewPublisher with topic go.micro.bookstore.srv.verification:account_created
+	accountCreated := micro.NewPublisher("go.micro.bookstore.srv.verification:account_created", service.Client())
+
 	// NewUserService
 	userService := user.NewUserService("go.micro.bookstore.srv.user", service.Client())
 
 	// Register Account Handler
-	proto.RegisterAccountHandler(service.Server(), &handler.Handler{Session: session, UserService: userService})
+	proto.RegisterAccountHandler(service.Server(), &handler.Handler{Session: session, AccountCreated: accountCreated, UserService: userService})
 
 	// Run service
 	if err := service.Run(); err != nil {
