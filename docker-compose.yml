@@ -21,6 +21,13 @@ services:
     - book-store
     ports:
     - "8080:8080"
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    networks: 
+    - book-store
+    ports:
+    - "27017:27017"
 networks: 
   book-store:
     name: book-store
