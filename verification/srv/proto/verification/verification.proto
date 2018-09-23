@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package go.micro.bookstore.srv.verification;
+
+service Verification {
+	rpc VerifyAccount(VerifyAccountRequest) returns (VerifyAccountResponse) {}
+}
+
+message VerifyAccountRequest {
+    string account_id = 1;
+    string token = 2;
+}
+
+message VerifyAccountResponse {
+	int32 code = 1;
+	string detail = 2;
+}
