@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package go.micro.bookstore.srv.catalog;
+
+import "github.com/ahmadnurus/go-micro-bookstore/product/srv/proto/product/product.proto";
+
+service Catalog {
+	rpc CreateCategory(CreateCategoryRequest) returns (CreateCategoryResponse) {}
+	rpc GetCategory(GetCategoryRequest) returns (GetCategoryResponse) {}
+	rpc ListCategory(ListCategoryRequest) returns (ListCategoryResponse) {}
+	rpc UpdateCategory(UpdateCategoryRequest) returns (UpdateCategoryResponse) {}
+	rpc DeleteCategory(DeleteCategoryRequest) returns (DeleteCategoryResponse) {}
+	rpc AddBook(AddBookRequest) returns (AddBookResponse) {}
+	rpc GetByBook(GetByBookRequest) returns (GetByBookResponse) {}
+	rpc ListBook(ListBookRequest) returns (ListBookResponse) {}
+	rpc RemoveBook(RemoveBookRequest) returns (RemoveBookResponse) {}
+}
+
+message Category {
+	string id = 1;
+	string name = 2;
+	string display_name = 3;
+	repeated string books = 4;
+}
+
+message CreateCategoryRequest {
+	Category category = 1;
+}
+
+message CreateCategoryResponse {
+	int32 code = 1;
+	string detail = 2;
+	Category category = 3;
+}
+
+message GetCategoryRequest {
+	string name = 1;
+}
+
+message GetCategoryResponse {
+	int32 code = 1;
+    string detail = 2;
+	Category category = 3;
+}
+
+message ListCategoryRequest {}
+
+message ListCategoryResponse {
+	int32 code = 1;
+    string detail = 2;
+	repeated Category categories = 3;
+}
+
+message UpdateCategoryRequest {
+	Category category = 1;
+}
+
+message UpdateCategoryResponse {
+	int32 code = 1;
+	string detail = 2;
+	Category category = 3;
+}
+
+message DeleteCategoryRequest {
+	string id = 1;
+}
+
+message DeleteCategoryResponse {
+	int32 code = 1;
+	string detail = 2;
+}
+
+message AddBookRequest {
+	string category = 1;
+	string book_id = 2;
+}
+
+message AddBookResponse {
+	int32 code = 1;
+    string detail = 2;
+    string category = 3;
+	string book_id = 4;
+}
+
+message GetByBookRequest {
+	string book_id = 1;
+}
+
+message GetByBookResponse {
+	int32 code = 1;
+    string detail = 2;
+	Category category = 3;
+}
+
+message ListBookRequest {
+	string category = 1;
+}
+
+message ListBookResponse {
+    int32 code = 1;
+    string detail = 2;
+    string category = 3;
+	repeated go.micro.bookstore.srv.product.Book books = 4;
+}
+
+message RemoveBookRequest {
+    string category = 1;
+   	string book_id = 2;
+}
+
+message RemoveBookResponse {
+    int32 code = 1;
+	string detail = 2;
+}
