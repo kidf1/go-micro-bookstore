@@ -27,6 +27,7 @@ package go_micro_bookstore_srv_account
 import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
+import _ "github.com/ahmadnurus/go-micro-bookstore/auth/srv/proto/auth"
 
 import (
 	client "github.com/micro/go-micro/client"

@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package go.micro.bookstore.srv.account;
 
+import "github.com/ahmadnurus/go-micro-bookstore/auth/srv/proto/auth/auth.proto";
+
 service Account {
 	rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse) {}
 	rpc GetAccount(GetAccountRequest) returns (GetAccountResponse) {}
@@ -72,6 +74,7 @@ message LoginRequest {
 message LoginResponse {
 	int32 code = 1;
 	string detail = 2;
+	go.micro.bookstore.srv.auth.Token token = 3;
 }
 
 message LogoutRequest {}

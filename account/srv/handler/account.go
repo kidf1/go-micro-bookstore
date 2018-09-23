@@ -9,7 +9,9 @@ import (
 
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/errors"
+	"github.com/micro/go-micro/metadata"
 
+	auth "github.com/ahmadnurus/go-micro-bookstore/auth/srv/proto/auth"
 	user "github.com/ahmadnurus/go-micro-bookstore/user/srv/proto/user"
 
 	proto "github.com/ahmadnurus/go-micro-bookstore/account/srv/proto/account"
@@ -20,6 +22,7 @@ import (
 type Handler struct {
 	Session        *mgo.Session
 	AccountCreated micro.Publisher
+	AuthService    auth.AuthService
 	UserService    user.UserService
 }
 
@@ -154,13 +157,32 @@ func (h *Handler) Login(ctx context.Context, req *proto.LoginRequest, res *proto
 		return err
 	}
 
+	token, err := h.AuthService.Token(context.Background(), &auth.TokenRequest{
+		ClientId: account.Id,
+		Issuer:   "go.micro.bookstore.srv.account",
+	})
+
 	res.Code = 200
 	res.Detail = "authenticated"
+	res.Token = token.Token
 	return nil
 }
 
 // Logout method
 func (h *Handler) Logout(ctx context.Context, req *proto.LogoutRequest, res *proto.LogoutResponse) error {
+	meta, ok := metadata.FromContext(ctx)
+	if !ok {
+		return errors.BadRequest("go.micro.bookstore.srv.account", "no auth meta-data found in request")
+	}
+	accessToken := meta["Access-Token"]
+
+	_, err := h.AuthService.Revoke(context.Background(), &auth.RevokeRequest{
+		AccessToken: accessToken,
+	})
+	if err != nil {
+		return err
+	}
+
 	res.Code = 200
 	res.Detail = "session ended"
 	return nil
