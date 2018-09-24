@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package go.micro.bookstore.srv.author;
+
+import "github.com/ahmadnurus/go-micro-bookstore/product/srv/proto/product/product.proto";
+
+service Author {
+	rpc CreateAuthor(CreateAuthorRequest) returns (CreateAuthorResponse) {}
+	rpc GetAuthor(GetAuthorRequest) returns (GetAuthorResponse) {}
+	rpc GetAuthorByID(GetAuthorByIDRequest) returns (GetAuthorByIDResponse) {}
+	rpc UpdateAuthor(UpdateAuthorRequest) returns (UpdateAuthorResponse) {}
+	rpc DeleteAuthor(DeleteAuthorRequest) returns (DeleteAuthorResponse) {}
+	rpc AddAuthorBook(AddAuthorBookRequest) returns (AddAuthorBookResponse) {}
+	rpc GetAuthorBook(GetAuthorBookRequest) returns (GetAuthorBookResponse) {}
+	rpc RemoveAuthorBook(RemoveAuthorBookRequest) returns (RemoveAuthorBookResponse) {}
+}
+
+message AuthorProfile {
+	string id = 1;
+	string username = 2;
+	string fullname = 3;
+	repeated string books = 4;
+	int64 created_at = 5;
+	int64 updated_at = 6; 
+}
+
+message CreateAuthorRequest{
+	AuthorProfile author = 1;
+}
+
+message CreateAuthorResponse {
+	int32 code = 1;
+	string detail = 2;
+	AuthorProfile author = 3;
+}
+
+message GetAuthorRequest {
+	string username = 1;
+}
+
+message GetAuthorResponse {
+	int32 code = 1;
+	string detail = 2;
+	AuthorProfile author = 3;
+}
+
+message GetAuthorByIDRequest {
+	string id = 1;
+}
+
+message GetAuthorByIDResponse {
+	int32 code = 1;
+	string detail = 2;
+	AuthorProfile author = 3;
+}
+
+message UpdateAuthorRequest {
+	AuthorProfile author = 1;
+}
+
+message UpdateAuthorResponse {
+	int32 code = 1;
+	string detail = 2;
+	AuthorProfile author = 3;
+}
+
+message DeleteAuthorRequest {
+	string id = 1;
+}
+
+message DeleteAuthorResponse {
+	int32 code = 1;
+	string detail = 2;
+}
+
+message AddAuthorBookRequest {
+	string author = 1;
+	string book_id = 2;
+}
+
+message AddAuthorBookResponse {
+	int32 code = 1;
+    string detail = 2;
+    string author = 3;
+	string book_id = 4;
+}
+
+message GetAuthorBookRequest {
+	string author = 1;
+}
+
+message GetAuthorBookResponse {
+    int32 code = 1;
+    string detail = 2;
+    string author = 3;
+	repeated go.micro.bookstore.srv.product.Book books = 4;
+}
+
+message RemoveAuthorBookRequest {
+    string author = 1;
+   	string book_id = 2;
+}
+
+message RemoveAuthorBookResponse {
+    int32 code = 1;
+	string detail = 2;
+}
